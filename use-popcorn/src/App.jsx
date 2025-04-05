@@ -15,6 +15,7 @@ import StarRating from "./components/StarRating";
 
 // CUSTOM HOOKS
 import { useMovies } from "./hooks/useMovies";
+import { useLocalStorageState } from "./hooks/useLocalStorageState";
 
 // DATA
 // import { tempMovieData } from "./data/data";
@@ -27,19 +28,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
   // Fetch movies on search
   const { movies, isLoading, error } = useMovies(query, handleCloseMovie);
-  const [watched, setWatched] = useState(function () {
-    // Uses a callback function to set the initial state to the value of watched in localStorage
-    const storedValue = localStorage.getItem("watched");
-    return JSON.parse(storedValue);
-  });
-
-  // Store data in localStorage
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched]
-  );
+  // Store watched movies in local storage
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
