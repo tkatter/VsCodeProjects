@@ -1,5 +1,5 @@
 // MODULES
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 // MODULES
 import NavBar from "./components/NavBar";
@@ -141,9 +141,13 @@ export default function App() {
 }
 
 function MovieDetails({ watched, selectedId, onCloseMovie, onAddWatched }) {
+  // STATES
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState("");
+
+  // REFS
+  const countRef = useRef([]);
 
   const isWatched = watched.map((mv) => mv.imdbId).includes(selectedId);
   const watchedUserRating = watched.find(
@@ -172,10 +176,23 @@ function MovieDetails({ watched, selectedId, onCloseMovie, onAddWatched }) {
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
+      countRatingDecisions: countRef.current,
     };
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+
+  // Update countRef
+  useEffect(
+    function () {
+      if (userRating)
+        countRef.current.push({
+          decision: countRef.current.length + 1,
+          rating: userRating,
+        });
+    },
+    [userRating]
+  );
 
   // Escape keypress
   useEffect(
