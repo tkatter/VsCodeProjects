@@ -1,8 +1,4 @@
-export default function WatchedMovieList({
-  watched,
-  onDeleteWatched,
-  handleClick,
-}) {
+export default function WatchedMovieList({ watched, onDeleteWatched }) {
   return (
     <ul className="list list-movies invisible-scrollbar">
       {watched.map((movie) => (
@@ -10,15 +6,14 @@ export default function WatchedMovieList({
           movie={movie}
           key={movie.imdbId}
           onDeleteWatched={onDeleteWatched}
-          handleClick={handleClick}
         />
       ))}
     </ul>
   );
 }
-function WatchedMovie({ movie, onDeleteWatched, handleClick }) {
+function WatchedMovie({ movie, onDeleteWatched }) {
   return (
-    <li onClick={() => handleClick(movie.imdbId)}>
+    <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
       <h3>{movie.title}</h3>
       <div>
