@@ -21,7 +21,12 @@ const KEY = "6906ea54";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    // Uses a callback function to set the initial state to the value of watched in localStorage
+    const storedValue = localStorage.getItem("watched");
+    return JSON.parse(storedValue);
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
@@ -71,6 +76,14 @@ export default function App() {
       };
     },
     [query]
+  );
+
+  // Store data in localStorage
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
   );
 
   function handleSelectMovie(id) {
