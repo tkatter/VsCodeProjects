@@ -16,6 +16,7 @@ import StarRating from "./components/StarRating";
 // CUSTOM HOOKS
 import { useMovies } from "./hooks/useMovies";
 import { useLocalStorageState } from "./hooks/useLocalStorageState";
+import { useKey } from "./hooks/useKey";
 
 // DATA
 // import { tempMovieData } from "./data/data";
@@ -50,7 +51,7 @@ export default function App() {
   return (
     <>
       <NavBar>
-        <Search query={query} setQuery={setQuery} />
+        <Search query={query} setQuery={setQuery} onEnter={handleCloseMovie} />
         <NumResults movies={movies} />
       </NavBar>
 
@@ -140,22 +141,7 @@ function MovieDetails({ watched, selectedId, onCloseMovie, onAddWatched }) {
   );
 
   // Escape keypress
-  useEffect(
-    function () {
-      function callback(e) {
-        if (e.code === "Escape") {
-          onCloseMovie();
-        }
-      }
-
-      document.addEventListener("keydown", callback);
-
-      return function () {
-        document.removeEventListener("keydown", callback);
-      };
-    },
-    [onCloseMovie]
-  );
+  useKey("Escape", onCloseMovie);
 
   // Fetch movie details via selectedId
   useEffect(
