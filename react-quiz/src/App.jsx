@@ -18,6 +18,7 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  highScore: 0,
 };
 
 function reducer(state, { type, payload }) {
@@ -52,7 +53,7 @@ function reducer(state, { type, payload }) {
     case "next":
       return {
         ...state,
-        index: state.index < 14 ? state.index + 1 : state.index,
+        index: state.index + 1,
         answer: null,
       };
     case "previous":
@@ -60,16 +61,28 @@ function reducer(state, { type, payload }) {
         ...state,
         index: state.index - 1,
       };
+    case "finish":
+      return {
+        ...state,
+        status: "finished",
+        highScore:
+          state.points > state.highScore ? state.points : state.highScore,
+      };
+    case "restart":
+      return {
+        ...initialState,
+        questions: state.questions,
+        status: "ready",
+        highScore: state.highScore,
+      };
     default:
       throw new Error("Action unknown");
   }
 }
 
 export default function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ questions, status, index, answer, points, highScore }, dispatch] =
+    useReducer(reducer, initialState);
   const numQuestions = questions.length;
   const maxPoints = questions.reduce((prev, cur) => prev + cur.points, 0);
   useEffect(function () {
@@ -105,11 +118,21 @@ export default function App() {
                 answer={answer}
               />
             </Question>
-            <NextButton dispatch={dispatch} answer={answer} />
+            <NextButton
+              dispatch={dispatch}
+              answer={answer}
+              numQuestions={numQuestions}
+              index={index}
+            />
           </>
         )}
         {status === "finished" && (
-          <FinishScreen points={points} maxPoints={maxPoints} />
+          <FinishScreen
+            points={points}
+            maxPoints={maxPoints}
+            dispatch={dispatch}
+            highScore={highScore}
+          />
         )}
       </Main>
     </div>
