@@ -1,10 +1,7 @@
-function PageNotFound() {
+export default function PageNotFound() {
   return (
     <div>
-      <h1>404</h1>
-      <p style={{ textTransform: "uppercase" }}>page not found</p>
+      <h1>Page not found 😢</h1>
     </div>
   );
 }
-
-export default PageNotFound;
