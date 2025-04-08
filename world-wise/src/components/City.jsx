@@ -1,6 +1,6 @@
-// import styles from "./City.module.css";
+import styles from "./City.module.css";
 
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 // const formatDate = (date) =>
 //   new Intl.DateTimeFormat("en", {
@@ -12,6 +12,9 @@ import { useParams } from "react-router-dom";
 
 function City() {
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const lat = searchParams.get("lat");
+  const lng = searchParams.get("lng");
 
   // // TEMP DATA
   // const currentCity = {
@@ -23,7 +26,17 @@ function City() {
 
   // const { cityName, emoji, date, notes } = currentCity;
 
-  return <h1>CITY {id}</h1>;
+  return (
+    <div className={styles.city}>
+      <h3>CITY {id}</h3>
+      <h6>
+        Position: {lat}, {lng}
+      </h6>
+      <button onClick={() => setSearchParams({ lat: 23, lng: 50 })}>
+        Change position
+      </button>
+    </div>
+  );
 
   // return (
   //   <div className={styles.city}>
