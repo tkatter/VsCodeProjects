@@ -6,12 +6,13 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Icon } from "leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 
 import { useGeolocation } from "../hooks/useGeolocation";
+import { useUrlPosition } from "../hooks/useUrlPosition";
 import { useCities } from "../contexts/CitiesContext";
 import styles from "./Map.module.css";
 import Button from "./Button";
@@ -24,10 +25,7 @@ function Map() {
     getPosition,
   } = useGeolocation();
   const [mapPosition, setMapPosition] = useState([40, 0]);
-  const [searchParams] = useSearchParams();
-
-  const mapLat = searchParams.get("lat");
-  const mapLng = searchParams.get("lng");
+  const [mapLat, mapLng] = useUrlPosition();
 
   useEffect(
     function () {
@@ -95,10 +93,7 @@ function ChangeCenter({ position }) {
 function DetectClick() {
   const navigate = useNavigate();
   useMapEvents({
-    click: (e) => {
-      navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
-      console.log(e);
-    },
+    click: (e) => navigate(`form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`),
   });
 }
 
