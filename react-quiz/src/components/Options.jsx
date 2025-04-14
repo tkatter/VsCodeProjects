@@ -1,4 +1,9 @@
-function Options({ question, dispatch, answer }) {
+import { useQuiz } from "../contexts/QuizContext";
+
+function Options() {
+  const { questions, dispatch, index, answer } = useQuiz();
+  const question = questions.at(index);
+
   function handleClick(i) {
     dispatch({ type: "newAnswer", payload: i });
   }

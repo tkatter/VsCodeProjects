@@ -1,4 +1,8 @@
-function FinishScreen({ points, maxPoints, dispatch, highScore }) {
+import { useQuiz } from "../contexts/QuizContext";
+
+function FinishScreen() {
+  const { points, maxPoints, dispatch, highScore } = useQuiz();
+
   const percent = (points / maxPoints) * 100;
   function handleClick() {
     dispatch({ type: "restart" });
